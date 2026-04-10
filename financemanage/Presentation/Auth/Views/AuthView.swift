@@ -25,17 +25,22 @@ struct AuthView: View {
     }
 
     private var authContent: some View {
-        ScrollView(showsIndicators: false) {
-            VStack(spacing: 18) {
-                iconHeader
-                card
+        GeometryReader { proxy in
+            ZStack {
+                AppPalette.screenBackground
+                    .ignoresSafeArea()
+
+                VStack(spacing: 18) {
+                    iconHeader
+                    card
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .padding(.horizontal, 22)
+                .padding(.top, 10)
+                .padding(.bottom, 10)
+                .scrollDismissesKeyboard(.interactively)
             }
-            .padding(.horizontal, 22)
-            .padding(.top, 42)
-            .padding(.bottom, 28)
         }
-        .scrollDismissesKeyboard(.interactively)
-        .background(AppPalette.screenBackground.ignoresSafeArea())
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 Spacer()
@@ -45,36 +50,40 @@ struct AuthView: View {
     }
 
     private var iconHeader: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 10) {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .fill(Color.white)
-                .frame(width: 58, height: 58)
+                .frame(width: 52, height: 52)
                 .overlay {
                     Text("P")
-                        .font(.title3.weight(.bold))
+                        .font(.headline.weight(.bold))
                         .foregroundStyle(.black)
                 }
 
             Text("Welcome to PayU")
-                .font(.system(size: 40, weight: .bold))
+                .font(.system(size: 34, weight: .bold))
                 .foregroundStyle(AppPalette.primaryText)
 
             Text("Send money globally with the real exchange rate")
-                .font(.headline)
+                .font(.subheadline)
                 .multilineTextAlignment(.center)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(AppPalette.secondaryText)
         }
-        .padding(.bottom, 8)
+        .padding(.bottom, 4)
     }
 
     private var card: some View {
-        VStack(alignment: .leading, spacing: 16) {
+        VStack(alignment: .leading, spacing: 12) {
             Text("Get started")
-                .font(.system(size: 34, weight: .semibold))
+                .font(.system(size: 30, weight: .semibold))
                 .foregroundStyle(AppPalette.primaryText)
 
             Text("Sign in to your account or create a new one")
                 .font(.title3)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(AppPalette.secondaryText)
 
             modeSegment
@@ -111,7 +120,7 @@ struct AuthView: View {
             .clipShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
             .disabled(viewModel.isLoading)
         }
-        .padding(18)
+        .padding(14)
         .background(AppPalette.cardBackground)
         .overlay(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
